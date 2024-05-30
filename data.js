@@ -140,30 +140,44 @@ findErrors(CourseInfo, AssignmentInfo, AssignmentGroup);
 // If an assignment is not yet due, do not include it in the results or the average. Additionally,
 //  if the learner’s submission is late (submitted_at is past due_at),
 // deduct 10 percent of the total points possible from their score for that assignment.
-function assignmentData(assignment,submission){
+function assignmentData(assignment,submissions){
   const currentTime =  new Date()
-  const dueTime = new Date(assignment.due_at)
-  const submissionDate = new Date(submission.submitted_at)
-  console.log(currentTime)
-  console.log(dueTime)
-  console.log(submissionDate)
+ 
+  assignment.forEach((assignment) => {
+    const dueTime = new Date(assignment.due_at);
+    console.log('Assignment due at:', dueTime);
+
+    const submission = submissions.find(sub => sub.assignment_id === assignment.id);
+    if (!submission) {
+      console.log(`No submission found for assignment ID ${assignment.id}`);
+      return;
+    }
+
+  const submissionDate =  new Date(submission.submission.submitted_at);
+
+  console.log('currentTime:',currentTime)
+  console.log('dueTime:',dueTime)
+  console.log('submissionDate:',submissionDate)
 
   // assignment is not yet due
   if(dueTime > currentTime){
+    console.log(`Assignment ${assignment.id} is not yet due.`);
    return null
     
   }
   if(submissionDate>currentTime){
     submission.submission.score -= assignment.points_possible * 0.1;
   }
-  return {
+  const result = {
     assignment_id: assignment.id,
     percentage: (submission.score / assignment.points_possible) * 100,
   };
+  console.log(result);
   
+})
 }
-const result= assignmentData(AssignmentInfo,LearnerSubmissions)
-console.log(result);
+assignmentData(AssignmentInfo,LearnerSubmissions)
+
 
 
 
