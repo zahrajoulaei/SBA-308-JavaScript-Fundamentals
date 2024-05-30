@@ -116,17 +116,18 @@ function findErrors(CourseInfo, AssignmentInfo, AssignmentGroup) {
         throw new Error("point should not be zero!!");
       }
       if (
-        isNaN(Number(assignment.points_possible)) ||
-        isNaN(Number(assignment.id))
+        //use parseInt instade of Number to check even the strings like "1"
+        isNaN(parseInt(assignment.points_possible)) ||
+        isNaN(parseInt(assignment.id))
       ) {
         throw new Error("data should be number!!");
       }
     });
 
     if (
-      isNaN(Number(AssignmentGroup.group_weight)) ||
-      isNaN(Number(AssignmentGroup.course_id)) ||
-      isNaN(Number(CourseInfo.id))
+      isNaN(parseInt(AssignmentGroup.group_weight)) ||
+      isNaN(parseInt(AssignmentGroup.course_id)) ||
+      isNaN(parseInt(CourseInfo.id))
     ) {
       throw new Error("the data should be a number!");
     }
@@ -139,5 +140,7 @@ findErrors(CourseInfo, AssignmentInfo, AssignmentGroup);
 // If an assignment is not yet due, do not include it in the results or the average. Additionally,
 //  if the learner’s submission is late (submitted_at is past due_at),
 // deduct 10 percent of the total points possible from their score for that assignment.
+
+
 
 function getLearnerData() {}
