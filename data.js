@@ -116,7 +116,7 @@ function findErrors(CourseInfo, AssignmentInfo, AssignmentGroup) {
         throw new Error("point should not be zero!!");
       }
       if (
-        //use parseInt instade of Number to check even the strings like "1"
+        //used parseInt instade of Number to check even the strings like "1"
         isNaN(parseInt(assignment.points_possible)) ||
         isNaN(parseInt(assignment.id))
       ) {
@@ -140,7 +140,32 @@ findErrors(CourseInfo, AssignmentInfo, AssignmentGroup);
 // If an assignment is not yet due, do not include it in the results or the average. Additionally,
 //  if the learner’s submission is late (submitted_at is past due_at),
 // deduct 10 percent of the total points possible from their score for that assignment.
+function assignmentData(assignment,submission){
+  const currentTime =  new Date()
+  const dueTime = new Date(assignment.due_at)
+  const submissionDate = new Date(submission.submitted_at)
+  console.log(currentTime)
+  console.log(dueTime)
+  console.log(submissionDate)
+
+  // assignment is not yet due
+  if(dueTime > currentTime){
+   return null
+    
+  }
+  if(submissionDate>currentTime){
+    submission.submission.score -= assignment.points_possible * 0.1;
+  }
+  return {
+    assignment_id: assignment.id,
+    percentage: (submission.score / assignment.points_possible) * 100,
+  };
+  
+}
+const result= assignmentData(AssignmentInfo,LearnerSubmissions)
+console.log(result);
 
 
 
-function getLearnerData() {}
+
+// function getLearnerData() {}
