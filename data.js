@@ -20,8 +20,6 @@
 //     <assignment_id>: number,
 // }
 
-// If an AssignmentGroup does not belong to its course (mismatching course_id), your program should throw an error,
-//  letting the user know that the input was invalid. Similar data validation should occur elsewhere within the program.
 const CourseInfo = {
   id: 451,
   name: "Introduction to JavaScript",
@@ -96,5 +94,38 @@ const LearnerSubmissions = [
     },
   },
 ];
+
+
+// If an AssignmentGroup does not belong to its course (mismatching course_id), your program should throw an error,
+//  letting the user know that the input was invalid. Similar data validation should occur elsewhere within the program.
+
+function findMismatchCourseId(CourseInfo,AssignmentGroup) {
+  if(AssignmentGroup.course_id !== CourseInfo.id){
+    throw new Error('the input is invalid');
+  
+  
+  }
+}
+
+findMismatchCourseId(CourseInfo,AssignmentGroup)
+
+
+// You should also account for potential errors in the data that your program receives.What if points_possible is 0? 
+//  You cannot divide by zero. What if a value that you are expecting to be a number is instead a string? 
+// Use try/catch and other logic to handle these types of errors gracefully.
+
+
+function findErrors(){
+  if(points_possible===0){
+    
+  }
+
+}
+
+
+
+// If an assignment is not yet due, do not include it in the results or the average. Additionally,
+//  if the learner’s submission is late (submitted_at is past due_at), 
+// deduct 10 percent of the total points possible from their score for that assignment.
 
 function getLearnerData() {}
