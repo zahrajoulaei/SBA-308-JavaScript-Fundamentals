@@ -51,7 +51,6 @@ const AssignmentGroup = {
   group_weight: 25,
   assignments: AssignmentInfo,
 };
-console.log(AssignmentGroup)
 const LearnerSubmissions = [
   {
     learner_id: 125,
@@ -95,37 +94,50 @@ const LearnerSubmissions = [
   },
 ];
 
-
 // If an AssignmentGroup does not belong to its course (mismatching course_id), your program should throw an error,
 //  letting the user know that the input was invalid. Similar data validation should occur elsewhere within the program.
 
-function findMismatchCourseId(CourseInfo,AssignmentGroup) {
-  if(AssignmentGroup.course_id !== CourseInfo.id){
-    throw new Error('the input is invalid');
-  
-  
+function findMismatchCourseId(CourseInfo, AssignmentGroup) {
+  if (AssignmentGroup.course_id !== CourseInfo.id) {
+    throw new Error("the input is invalid");
   }
 }
 
-findMismatchCourseId(CourseInfo,AssignmentGroup)
+findMismatchCourseId(CourseInfo, AssignmentGroup);
 
-
-// You should also account for potential errors in the data that your program receives.What if points_possible is 0? 
-//  You cannot divide by zero. What if a value that you are expecting to be a number is instead a string? 
+// You should also account for potential errors in the data that your program receives.What if points_possible is 0? You cannot divide by zero.
+//  What if a value that you are expecting to be a number is instead a string?
 // Use try/catch and other logic to handle these types of errors gracefully.
 
+function findErrors(CourseInfo, AssignmentInfo, AssignmentGroup) {
+  try {
+    AssignmentInfo.forEach((assignment) => {
+      if (assignment.points_possible === 0) {
+        throw new Error("point should not be zero!!");
+      }
+      if (
+        isNaN(Number(assignment.points_possible)) ||
+        isNaN(Number(assignment.id))
+      ) {
+        throw new Error("data should be number!!");
+      }
+    });
 
-function findErrors(){
-  if(points_possible===0){
-    
+    if (
+      isNaN(Number(AssignmentGroup.group_weight)) ||
+      isNaN(Number(AssignmentGroup.course_id)) ||
+      isNaN(Number(CourseInfo.id))
+    ) {
+      throw new Error("the data should be a number!");
+    }
+  } catch (Error) {
+    console.log(e);
   }
-
 }
-
-
+findErrors(CourseInfo, AssignmentInfo, AssignmentGroup);
 
 // If an assignment is not yet due, do not include it in the results or the average. Additionally,
-//  if the learner’s submission is late (submitted_at is past due_at), 
+//  if the learner’s submission is late (submitted_at is past due_at),
 // deduct 10 percent of the total points possible from their score for that assignment.
 
 function getLearnerData() {}
