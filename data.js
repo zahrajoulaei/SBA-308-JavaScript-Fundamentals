@@ -171,7 +171,7 @@ function assignmentData(assignment, submissions) {
     }
     const result = {
       assignment_id: assignment.id,
-      percentage: (submission.score / assignment.points_possible) * 100,
+      percentage: (submission.submission.score / assignment.points_possible) * 100,
     };
     console.log(result);
   });
