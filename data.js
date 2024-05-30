@@ -103,7 +103,7 @@ function findMismatchCourseId(CourseInfo, AssignmentGroup) {
   }
 }
 
-findMismatchCourseId(CourseInfo, AssignmentGroup);
+// findMismatchCourseId(CourseInfo, AssignmentGroup);
 
 // You should also account for potential errors in the data that your program receives.What if points_possible is 0? You cannot divide by zero.
 //  What if a value that you are expecting to be a number is instead a string?
@@ -131,51 +131,137 @@ function findErrors(CourseInfo, AssignmentInfo, AssignmentGroup) {
     ) {
       throw new Error("the data should be a number!");
     }
-  } catch (Error) {
-    console.log(e);
+  } catch (e) {
+    console.log(e.message);
   }
 }
-findErrors(CourseInfo, AssignmentInfo, AssignmentGroup);
+// findErrors(CourseInfo, AssignmentInfo, AssignmentGroup);
 
 // If an assignment is not yet due, do not include it in the results or the average. Additionally,
 //  if the learner’s submission is late (submitted_at is past due_at),
 // deduct 10 percent of the total points possible from their score for that assignment.
-function assignmentData(assignment, submissions) {
+// function assignmentData(assignment, submission) {
+//   const currentTime = new Date();
+//   const dueTime = new Date(assignment.due_at);
+//   console.log("Assignment due at:", dueTime);
+
+
+
+//   // assignment.forEach((assignment) => {
+//   //   const dueTime = new Date(assignment.due_at);
+//   //   console.log("Assignment due at:", dueTime);
+
+//   //   const submission = submissions.find(
+//   //     (sub) => sub.assignment_id === assignment.id
+//   //   );
+//   //   if (!submission) {
+//   //     console.log(`No submission found for assignment ID ${assignment.id}`);
+//   //     return;
+//   //   }
+
+//     const submissionDate = new Date(submission.submission.submitted_at);
+
+//     console.log("currentTime:", currentTime);
+//     console.log("dueTime:", dueTime);
+//     console.log("submissionDate:", submissionDate);
+
+//     // assignment is not yet due
+//     if (dueTime > currentTime) {
+//       console.log(`Assignment ${assignment.id} is not yet due.`);
+//       return null;
+//     }
+//     if (submissionDate > currentTime) {
+//       submission.submission.score -= assignment.points_possible * 0.1;
+//     }
+//     const result = {
+//       assignment_id: assignment.id,
+//       percentage:
+//         (submission.submission.score / assignment.points_possible) * 100,
+//     };
+//     console.log(result);
+  
+// }
+
+function assignmentData(assignment, submission) {
   const currentTime = new Date();
 
-  assignment.forEach((assignment) => {
-    const dueTime = new Date(assignment.due_at);
-    console.log("Assignment due at:", dueTime);
+  const dueTime = new Date(assignment.due_at);
+  console.log("Assignment due at:", dueTime);
 
-    const submission = submissions.find(
-      (sub) => sub.assignment_id === assignment.id
-    );
-    if (!submission) {
-      console.log(`No submission found for assignment ID ${assignment.id}`);
-      return;
-    }
+  const submissionDate = new Date(submission.submission.submitted_at);
 
-    const submissionDate = new Date(submission.submission.submitted_at);
 
-    console.log("currentTime:", currentTime);
-    console.log("dueTime:", dueTime);
-    console.log("submissionDate:", submissionDate);
+  console.log("currentTime:", currentTime);
+  console.log("dueTime:", dueTime);
+  console.log("submissionDate:", submissionDate);
 
-    // assignment is not yet due
-    if (dueTime > currentTime) {
-      console.log(`Assignment ${assignment.id} is not yet due.`);
-      return null;
-    }
-    if (submissionDate > currentTime) {
-      submission.submission.score -= assignment.points_possible * 0.1;
-    }
-    const result = {
-      assignment_id: assignment.id,
-      percentage: (submission.submission.score / assignment.points_possible) * 100,
-    };
-    console.log(result);
-  });
+  // assignment is not yet due
+  if (dueTime > currentTime) {
+    console.log(`Assignment ${assignment.id} is not yet due.`);
+    return null;
+  }
+  if (submissionDate > dueTime) {
+    submission.submission.score -= assignment.points_possible * 0.1;
+  }
+  return {
+    assignment_id: assignment.id,
+    percentage: (submission.submission.score / assignment.points_possible) * 100,
+  };
 }
 assignmentData(AssignmentInfo, LearnerSubmissions);
 
-// function getLearnerData() {}
+function getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions) {
+  //use the findMismatchCourseId() function:
+  findMismatchCourseId(CourseInfo, AssignmentGroup);
+
+  //use the findErrors() function:
+  findErrors(CourseInfo, AssignmentGroup, AssignmentGroup.assignments);
+
+  let learnersData = [];
+  let learnerIds = [
+    ...new Set(LearnerSubmissions.map(item => item.learner_id))];
+  console.log("Learners ID:", learnerIds);
+
+  learnerIds.forEach(learner_id => {
+    let learnerSubmissions = LearnerSubmissions.filter(
+      sub => sub.learner_id === learner_id
+    );
+    let totalScore = 0;
+    let totalPossiblePoints = 0;
+    let assignmentsData = {};
+
+    learnerSubmissions.forEach((submission) => {
+      let assignment = AssignmentGroup.assignments.find(
+        (a) => a.id === submission.assignment_id
+      );
+      if (!assignment) {
+        throw new Error(
+          `Assignment with id ${submission.assignment_id} not found in AssignmentGroup.`
+        );
+      }
+      let assignmentResult = assignmentData(assignment, submission);
+      if (assignmentResult === null) {
+        return;
+      }
+      assignmentsData[assignment.id] = assignmentResult.percentage;
+      totalScore += submission.submission.score;
+      totalPossiblePoints += assignment.points_possible;
+    });
+    let avg = (totalScore / totalPossiblePoints) * 100;
+    let learnerData = {
+      id: learner_id,
+      avg: avg,
+      ...assignmentsData,
+    };
+
+    learnersData.push(learnerData);
+  });
+
+  return learnersData;
+}
+const learnersData = getLearnerData(
+  CourseInfo,
+  AssignmentGroup,
+  LearnerSubmissions
+);
+console.log(learnersData);
