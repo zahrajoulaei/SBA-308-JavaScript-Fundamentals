@@ -132,15 +132,15 @@ function assignmentData(assignment, submission) {
   const currentTime = new Date();
 
   const dueTime = new Date(assignment.due_at);
-  console.log("Assignment due at:", dueTime);
+  // console.log("Assignment due at:", dueTime);
 
   const submissionDate = new Date(
     submission.submission.submitted_at + "T00:00:00"
   );
 
-  console.log("currentTime:", currentTime);
-  console.log("dueTime:", dueTime);
-  console.log("submissionDate:", submissionDate);
+  // console.log("currentTime:", currentTime);
+  // console.log("dueTime:", dueTime);
+  // console.log("submissionDate:", submissionDate);
 
   // assignment is not yet due
   if (dueTime > currentTime) {
@@ -188,7 +188,7 @@ function getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions) {
   let learnerIds = [
     ...new Set(LearnerSubmissions.map((item) => item.learner_id)),
   ];
-  console.log("Learners ID:", learnerIds);
+
 
   learnerIds.forEach((learner_id) => {
     let learnerSubmissions = LearnerSubmissions.filter(
@@ -226,7 +226,7 @@ function getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions) {
   });
   // alternative usage of the swith for the grade only
   //use for insteade of forEach. but i preferred forEach here.
-  
+
   // for (let i = 0; i < learnerIds.length; i++) {
   //   let learner_id = learnerIds[i];
   //   let learnerSubmissions = LearnerSubmissions.filter(sub => sub.learner_id === learner_id);
