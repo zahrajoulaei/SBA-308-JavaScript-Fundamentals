@@ -92,12 +92,21 @@ the goal is to analyze and transform this data such that the output of your prog
 
 To set up the project locally, follow these steps:
 
-1. **Clone the repository**:
-    ```sh
+ **Clone the repository**:
+    ```
     https://github.com/zahrajoulaei/SBA-308-JavaScript-Fundamentals
     ```
 
 
+
+
+## Example output:
+ ```
+ [
+  { '1': 84, '2': 100, id: 125, avg: 96 },
+  { '1': 78, '2': 83.33333333333334, id: 132, avg: 82 }
+]
+ ```
 
 
 
