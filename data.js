@@ -147,9 +147,10 @@ function assignmentData(assignment, submission) {
     console.log(`Assignment ${assignment.id} is not yet due.`);
     return null;
   }
-  if (submissionDate > dueTime) {
+  else if (submissionDate > dueTime) {
     submission.submission.score -= assignment.points_possible * 0.1;
   }
+ 
 
   // alternative usage of the swith for the grade only.(i prefered only if statements here)
 
@@ -162,11 +163,18 @@ function assignmentData(assignment, submission) {
   //     break;
   // }
 
-  return {
-    assignment_id: assignment.id,
-    percentage:
-      (submission.submission.score / assignment.points_possible) * 100,
-  };
+  const result = {
+    
+      assignment_id : assignment.id,
+      percentage:
+        (submission.submission.score / assignment.points_possible) * 100,
+  }
+  return result;
+  // return {
+  //   assignment_id: assignment.id,
+  //   percentage:
+  //     (submission.submission.score / assignment.points_possible) * 100,
+  // };
 }
 
 // Main function:
