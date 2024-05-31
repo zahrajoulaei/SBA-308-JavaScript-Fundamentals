@@ -14,12 +14,6 @@
 //     // the average or the keyed dictionary of scores
 // }
 
-// {
-//     "id": number,
-//     "avg": number,
-//     <assignment_id>: number,
-// }
-
 const CourseInfo = {
   id: 451,
   name: "Introduction to JavaScript",
@@ -134,14 +128,15 @@ function findErrors(CourseInfo, AssignmentInfo, AssignmentGroup) {
   }
 }
 
-
 function assignmentData(assignment, submission) {
   const currentTime = new Date();
 
   const dueTime = new Date(assignment.due_at);
   console.log("Assignment due at:", dueTime);
 
-  const submissionDate = new Date(submission.submission.submitted_at + "T00:00:00");
+  const submissionDate = new Date(
+    submission.submission.submitted_at + "T00:00:00"
+  );
 
   console.log("currentTime:", currentTime);
   console.log("dueTime:", dueTime);
@@ -155,12 +150,24 @@ function assignmentData(assignment, submission) {
   if (submissionDate > dueTime) {
     submission.submission.score -= assignment.points_possible * 0.1;
   }
+
+  // alternative usage of the swith for the grade only.(i prefered only if statements here)
+
+  // switch (true) {
+  //   case dueTime > currentTime:
+  //     console.log(`Assignment ${assignment.id} is not yet due.`);
+  //     return null;
+  //   case submissionDate > dueTime:
+  //     submission.submission.score -= assignment.points_possible * 0.1;
+  //     break;
+  // }
+
   return {
     assignment_id: assignment.id,
-    percentage: (submission.submission.score / assignment.points_possible) * 100,
+    percentage:
+      (submission.submission.score / assignment.points_possible) * 100,
   };
 }
-
 
 // Main function:
 function getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions) {
@@ -168,16 +175,21 @@ function getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions) {
   findMismatchCourseId(CourseInfo, AssignmentGroup);
 
   //use the findErrors() function:
-  findErrors(CourseInfo, AssignmentGroup.assignments, AssignmentGroup.assignments);
+  findErrors(
+    CourseInfo,
+    AssignmentGroup.assignments,
+    AssignmentGroup.assignments
+  );
 
   let learnersData = [];
   let learnerIds = [
-    ...new Set(LearnerSubmissions.map(item => item.learner_id))];
+    ...new Set(LearnerSubmissions.map((item) => item.learner_id)),
+  ];
   console.log("Learners ID:", learnerIds);
 
-  learnerIds.forEach(learner_id => {
+  learnerIds.forEach((learner_id) => {
     let learnerSubmissions = LearnerSubmissions.filter(
-      sub => sub.learner_id === learner_id
+      (sub) => sub.learner_id === learner_id
     );
     let totalScore = 0;
     let totalPossiblePoints = 0;
@@ -209,6 +221,39 @@ function getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions) {
 
     learnersData.push(learnerData);
   });
+
+  //use for insteade of forEach. but i preferred forEach here.
+  // for (let i = 0; i < learnerIds.length; i++) {
+  //   let learner_id = learnerIds[i];
+  //   let learnerSubmissions = LearnerSubmissions.filter(sub => sub.learner_id === learner_id);
+  //   let totalScore = 0;
+  //   let totalPossiblePoints = 0;
+  //   let assignmentsData = {};
+  //   learnerSubmissions.forEach(submission => {
+  //     let assignment = AssignmentGroup.assignments.find(a => a.id === submission.assignment_id);
+  //     if (!assignment) {
+  //       throw new Error(`Assignment with id ${submission.assignment_id} not found in AssignmentGroup.`);
+  //     }
+  //     let assignmentResult = assignmentData(assignment, submission);
+  //     if (assignmentResult === null) {
+
+  // Utilize at least one loop control keyword such as break or continue:
+  //     continue;
+  //
+  //     }
+  //     assignmentsData[assignment.id] = assignmentResult.percentage;
+  //     totalScore += submission.submission.score;
+  //     totalPossiblePoints += assignment.points_possible;
+  //   });
+
+  //   let avg = (totalScore / totalPossiblePoints) * 100;
+  //   let learnerData = {
+  //     id: learner_id,
+  //     avg: avg,
+  //     ...assignmentsData
+  //   };
+  //   learnersData.push(learnerData);
+  // }
 
   return learnersData;
 }
