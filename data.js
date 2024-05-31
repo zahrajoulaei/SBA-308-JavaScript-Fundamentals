@@ -170,11 +170,6 @@ function assignmentData(assignment, submission) {
         (submission.submission.score / assignment.points_possible) * 100,
   }
   return result;
-  // return {
-  //   assignment_id: assignment.id,
-  //   percentage:
-  //     (submission.submission.score / assignment.points_possible) * 100,
-  // };
 }
 
 // Main function:
@@ -229,8 +224,9 @@ function getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions) {
 
     learnersData.push(learnerData);
   });
-
+  // alternative usage of the swith for the grade only
   //use for insteade of forEach. but i preferred forEach here.
+  
   // for (let i = 0; i < learnerIds.length; i++) {
   //   let learner_id = learnerIds[i];
   //   let learnerSubmissions = LearnerSubmissions.filter(sub => sub.learner_id === learner_id);
