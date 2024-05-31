@@ -181,7 +181,7 @@ function getLearnerData(CourseInfo, AssignmentGroup, LearnerSubmissions) {
   findErrors(
     CourseInfo,
     AssignmentGroup.assignments,
-    AssignmentGroup.assignments
+    AssignmentGroup
   );
 
   let learnersData = [];
